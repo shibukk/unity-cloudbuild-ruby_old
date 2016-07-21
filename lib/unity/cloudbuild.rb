@@ -1,7 +1,9 @@
-require "unity/cloudbuild/version"
+require "unity/cloudbuild/client"
 
 module Unity
   module Cloudbuild
-    # Your code goes here...
+    def self.client
+      @client ||= Unity::Cloudbuild::Client.new
+    end
   end
 end
