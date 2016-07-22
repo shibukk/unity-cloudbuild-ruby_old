@@ -22,7 +22,37 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Basic usage
+
+The gem uses a client model to query against the API of Unity Cloud Build.
+First of all, you create and configure a client through that.
+
+```ruby
+Unity::Cloudbuild.client.configure do |config|
+  config.token   = "YOUR_TOKEN"
+  config.org     = "YOUR_ORG"
+  config.project = "YOUR_PROJECT"
+end
+```
+
+### Build
+
+If you want to build any, you can use `#build` with a build_target.
+
+```ruby
+Unity::Cloudbuild.client.build(build_target: "YOUR_BUILD_TARGET")
+```
+
+### Cancel
+
+If you want to cancel build still in progress, you can use `#cancel` with a build_target.
+
+```ruby
+Unity::Cloudbuild.client.cancel(build_target: "YOUR_BUILD_TARGET")
+```
+
+Click here to read more information on the API.  
+https://build-api.cloud.unity3d.com/docs/1.0.0/index.html.
 
 ## Development
 
@@ -38,4 +68,3 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/[USERN
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
