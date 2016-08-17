@@ -5,8 +5,8 @@ module FaradayMiddleware
   class RaiseHttpException < Faraday::Response::Middleware
     def on_complete(env)
       case env[:status].to_i
-      when 200..204
-        return env.body
+      when 200..210
+        return
       when 401
         raise Unity::Cloudbuild::Error::InvalidSignature, error_message(env)
       when 404
@@ -27,6 +27,14 @@ module FaradayMiddleware
 
       if body.nil?
         nil
+      elsif body.is_a?(Array)
+        if body.size == 0
+          nil
+        elsif body[0]['error'] and not body[0]['error'].empty?
+          ": #{body[0]['error']}"
+        else
+          nil
+        end
       elsif body['error'] and not body['error'].empty?
         ": #{body['error']}"
       else

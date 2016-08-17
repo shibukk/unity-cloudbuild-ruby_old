@@ -1,32 +1,87 @@
 module Unity
   module Cloudbuild
     module Endpoint
-      class Builds
-        def initialize(client)
-          @client = client
-        end
-
+      class Builds < Base
+=begin
+simple aliases
+=end
         def build(options={})
-          @client.connection.post(base_path(options))
+          request(:post, build_target_path(options) + "/builds")
         end
 
         def cancel(options={})
-          @client.connection.delete(base_path(options))
+          request(:delete, build_target_path(options) + "/builds")
         end
 
         def download_urls(options={})
-          response = @client.connection.get(base_path(options) + "?buildStatus=success&per_page=1&page=1")
-          return response.body[0]["links"]["download_primary"]["href"] rescue nil
+          result = request(:get, build_target_path(options) + "/builds?buildStatus=success&per_page=1&page=1")
+          return result[0]["links"]["download_primary"]["href"] rescue nil
         end
 
-        private
+=begin
+default api
+=end
+        def get_audit_log(options={})
+          request(:get, build_target_path(options) + "/auditlog")
+        end
 
-        def base_path(options={})
-          org          = options[:org]          || @client.configuration.org
-          project      = options[:project]      || @client.configuration.project
-          build_target = options[:build_target] || @client.configuration.build_target
+        def create_polling_jobs(options={})
+          request(:post, build_target_path(options) + "/polling")
+        end
 
-          return "/api/v1/orgs/#{org}/projects/#{project}/buildtargets/#{build_target}/builds"
+        def list_all_builds(options={})
+          request(:get, build_target_path(options) + "/builds")
+        end
+
+        def create_new_build(options={})
+          request(:post, build_target_path(options) + "/builds")
+        end
+
+        def cancel_all_builds(options={})
+          request(:delete, build_target_path(options) + "/builds")
+        end
+
+        def build_status(options={})
+          number = options[:number] || @client.configuration.number
+          request(:get, build_target_path(options) + "/builds/#{number}")
+        end
+
+        def cancel_build(options={})
+          number = options[:number] || @client.configuration.number
+          request(:delete, build_target_path(options) + "/builds/#{number}")
+        end
+
+        def get_audit_log(options={})
+          number = options[:number] || @client.configuration.number
+          request(:get, build_target_path(options) + "/builds/#{number}/auditlog")
+        end
+
+        def list_all_builds_for_org(options={})
+          request(:get, org_path(options) + "/builds")
+        end
+
+        def cancel_builds_for_org(options={})
+          request(:delete, org_path(options) + "/builds")
+        end
+
+        def get_build_log(options={})
+          number = options[:number] || @client.configuration.number
+          request(:get, build_target_path(options) + "/builds/#{number}/log")
+        end
+
+        def get_the_share_link(options={})
+          number = options[:number] || @client.configuration.number
+          request(:get, build_target_path(options) + "/builds/#{number}/share")
+        end
+
+        def create_a_new_link_to_share_a_project(options={})
+          number = options[:number] || @client.configuration.number
+          request(:post, build_target_path(options) + "/builds/#{number}/share")
+        end
+
+        def revoke_a_shared_link(options={})
+          number = options[:number] || @client.configuration.number
+          request(:delete, build_target_path(options) + "/builds/#{number}/share")
         end
       end
     end

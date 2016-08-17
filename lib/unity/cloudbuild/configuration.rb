@@ -1,7 +1,8 @@
 module Unity
   module Cloudbuild
     class Configuration
-      AUTH_KEYS = [:token, :org, :project, :build_target]
+      AUTH_KEYS = [:token, :orgid, :projectid, :buildtargetid,
+        :number, :credentialid, :projectupid, :email, :shareid, :id]
 
       attr_accessor *AUTH_KEYS
 
