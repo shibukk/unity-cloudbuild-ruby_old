@@ -1,13 +1,12 @@
 require 'spec_helper'
-require 'pp'
 
-describe Unity::Cloudbuild::Endpoint::Builds do
+describe Unity::Cloudbuild::Endpoint::Simple do
   include_context 'shared configuration'
 
   let(:client) { Unity::Cloudbuild::Client.new(api_keys) }
   let(:api_keys) { valid_api_keys }
 
-  describe 'builds#build', vcr: 'endpoint/builds_build' do
+  describe 'simple#build', vcr: 'endpoint/simple_build' do
     subject { client.build }
 
     context 'when you success to build' do
@@ -21,7 +20,7 @@ describe Unity::Cloudbuild::Endpoint::Builds do
     end
   end
 
-  describe 'builds#cancel', vcr: 'endpoint/builds_cancel' do
+  describe 'simple#cancel', vcr: 'endpoint/simple_cancel' do
     subject { client.cancel }
 
     context 'when you success to cancel all build' do
@@ -35,7 +34,7 @@ describe Unity::Cloudbuild::Endpoint::Builds do
     end
   end
 
-  describe 'builds#download_urls', vcr: 'endpoint/builds_download_urls' do
+  describe 'simple#download_urls', vcr: 'endpoint/simple_download_urls' do
     subject { client.download_urls }
 
     context 'when you success to get download_urls' do

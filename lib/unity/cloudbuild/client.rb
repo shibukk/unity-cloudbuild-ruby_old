@@ -11,7 +11,12 @@ module Unity
   module Cloudbuild
     class Client
       API_HOST = "https://build-api.cloud.unity3d.com"
-      CLASSES = [ Unity::Cloudbuild::Endpoint::Builds, ]
+      CLASSES = [
+        Endpoint::Builds, Endpoint::Buildtargets, Endpoint::Config,
+        Endpoint::Credentials, Endpoint::Orgs, Endpoint::Projects,
+        Endpoint::Shares, Endpoint::Simple, Endpoint::Userdevices,
+        Endpoint::Users, Endpoint::Webhooks,
+      ]
 
       attr_reader :configuration
 

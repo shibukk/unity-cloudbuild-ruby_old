@@ -2,25 +2,6 @@ module Unity
   module Cloudbuild
     module Endpoint
       class Builds < Base
-=begin
-simple aliases
-=end
-        def build(options={})
-          request(:post, build_target_path(options) + "/builds")
-        end
-
-        def cancel(options={})
-          request(:delete, build_target_path(options) + "/builds")
-        end
-
-        def download_urls(options={})
-          result = request(:get, build_target_path(options) + "/builds?buildStatus=success&per_page=1&page=1")
-          return result[0]["links"]["download_primary"]["href"] rescue nil
-        end
-
-=begin
-default api
-=end
         def get_audit_log(options={})
           request(:get, build_target_path(options) + "/auditlog")
         end
