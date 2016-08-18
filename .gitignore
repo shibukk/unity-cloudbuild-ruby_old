@@ -8,3 +8,4 @@
 /spec/reports/
 /tmp/
 /lib/generators/endpoint/sample.rb
+/spec/vcr_cassettes
