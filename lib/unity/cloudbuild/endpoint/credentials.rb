@@ -1,7 +1,7 @@
 module Unity
   module Cloudbuild
     module Endpoint
-      class Credentinals < Base
+      class Credentials < Base
         def get_all_android_credentials(options={})
           request(:get, project_path(options) + "/credentials/signing/android")
         end
