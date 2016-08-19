@@ -24,15 +24,15 @@ describe Unity::Cloudbuild::Endpoint::Builds do
     api_keys[:number] = build[0]["build"]
   end
 
-  describe 'builds#get_audit_log', vcr: 'endpoint/builds_get_audit_log' do
-    subject { client.get_audit_log }
+  describe 'builds#get_all_audit_log', vcr: 'endpoint/builds_get_all_audit_log' do
+    subject { client.get_all_audit_log }
 
-    context 'when you success to get audit log' do
+    context 'when you success to get all audit log' do
       it { expect{ subject }.not_to raise_error }
       it { expect(subject).not_to be_empty }
     end
 
-    context 'when you failed to get audit log' do
+    context 'when you failed to get all audit log' do
       let(:api_keys) { invalid_api_keys }
       it { expect{ subject }.to raise_error Unity::Cloudbuild::Error::InvalidSignature }
     end

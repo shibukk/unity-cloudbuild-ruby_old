@@ -2,7 +2,7 @@ module Unity
   module Cloudbuild
     module Endpoint
       class Builds < Base
-        def get_audit_log(params={})
+        def get_all_audit_log(params={})
           request(:get, build_target_path(params) + "/auditlog")
         end
 
