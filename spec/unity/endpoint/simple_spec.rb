@@ -47,5 +47,4 @@ describe Unity::Cloudbuild::Endpoint::Simple do
       it { expect{ subject }.to raise_error Unity::Cloudbuild::Error::InvalidSignature }
     end
   end
-
 end
