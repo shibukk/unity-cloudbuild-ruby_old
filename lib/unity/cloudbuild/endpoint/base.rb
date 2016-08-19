@@ -6,8 +6,14 @@ module Unity
           @client = client
         end
 
-        def request(method, path, option={}, parse=true)
-          response = @client.connection(parse).send(method, path)
+        def request(method, path, options={}, parse=true)
+          response = @client.connection(parse).send(method) do |request|
+            if options.empty?
+              request.url(path)
+            else
+              request.url(path, body: options)
+            end
+          end
           return response.body
         end
 

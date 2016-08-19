@@ -10,6 +10,10 @@ module Unity
           request(:delete, build_target_path(params) + "/builds")
         end
 
+        def get_last_package(params={})
+          return request(:get, build_target_path(params) + "/builds?buildStatus=success&per_page=1&page=1")
+        end
+
         def download_urls(params={})
           result = request(:get, build_target_path(params) + "/builds?buildStatus=success&per_page=1&page=1")
           return result[0]["links"]["download_primary"]["href"] rescue nil

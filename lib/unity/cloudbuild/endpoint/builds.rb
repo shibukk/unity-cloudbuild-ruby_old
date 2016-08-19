@@ -14,8 +14,8 @@ module Unity
           request(:get, build_target_path(params) + "/builds")
         end
 
-        def create_new_build(params={})
-          request(:post, build_target_path(params) + "/builds")
+        def create_new_build(params={}, options={})
+          request(:post, build_target_path(params) + "/builds", options)
         end
 
         def cancel_all_builds(params={})
