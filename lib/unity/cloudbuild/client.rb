@@ -12,10 +12,17 @@ module Unity
     class Client
       API_HOST = "https://build-api.cloud.unity3d.com"
       CLASSES = [
-        Endpoint::Builds, Endpoint::Buildtargets, Endpoint::Config,
-        Endpoint::Credentials, Endpoint::Orgs, Endpoint::Projects,
-        Endpoint::Shares, Endpoint::Simple, Endpoint::Userdevices,
-        Endpoint::Users, Endpoint::Webhooks,
+        Endpoint::Builds,
+        Endpoint::Buildtargets,
+        Endpoint::Config,
+        Endpoint::Credentials,
+        Endpoint::Orgs,
+        Endpoint::Projects,
+        Endpoint::Shares,
+        Endpoint::Simple,
+        Endpoint::Userdevices,
+        Endpoint::Users,
+        Endpoint::Webhooks,
       ]
 
       attr_reader :configuration
@@ -52,14 +59,14 @@ module Unity
 
       # API connection
       # @return [Faraday] a new connection with configuration
-      def connection
+      def connection(parse=true)
         return @connection if instance_variable_defined?(:@connection)
         check_api_keys
 
         @connection = Faraday.new(API_HOST) do |conn|
           conn.headers["Content-Type"]  = "application/json"
           conn.headers["Authorization"] = "Basic #{@configuration.token}"
-          conn.use Faraday::Response::ParseJson
+          conn.use Faraday::Response::ParseJson if parse
           conn.response :raise_http_exception
           conn.adapter :net_http
         end

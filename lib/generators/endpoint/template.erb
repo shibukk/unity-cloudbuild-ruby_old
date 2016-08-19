@@ -1,7 +1,7 @@
 <% docs.each do |doc| %>
-def <%= doc.name %>(options={})
-<% if doc.option != nil -%>
-  <%= doc.option %>
+def <%= doc.name %>(params={})
+<% if doc.param != nil -%>
+  <%= doc.param %>
 <% end -%>
   request(:<%= doc.verb %>, <%= doc.url %>)
 end
