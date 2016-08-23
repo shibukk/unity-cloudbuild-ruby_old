@@ -1,3 +1,5 @@
+require 'json'
+
 module Unity
   module Cloudbuild
     module Endpoint
@@ -8,10 +10,12 @@ module Unity
 
         def request(method, path, options={}, parse=true)
           response = @client.connection(parse).send(method) do |request|
-            if options.empty?
-              request.url(path)
-            else
-              request.url(path, body: options)
+            case method
+            when :get, :delete
+              request.url(path, options.to_json)
+            when :post, :put
+              request.path = path
+              request.body = options.to_json unless options.empty?
             end
           end
           return response.body

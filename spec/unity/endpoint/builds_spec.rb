@@ -98,7 +98,7 @@ describe Unity::Cloudbuild::Endpoint::Builds do
     end
 
     context 'when you success to create new build add options' do
-      subject { client.create_new_build({}, {clean: true, delay: 30}) }
+      subject { client.create_new_build({}, { clean: true, delay: 30 }) }
       it { expect{ subject }.not_to raise_error }
       it { expect(subject).not_to be_empty }
     end
