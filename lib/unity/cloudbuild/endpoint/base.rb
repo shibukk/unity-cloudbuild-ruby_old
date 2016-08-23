@@ -1,4 +1,5 @@
 require 'json'
+require 'net/http'
 
 module Unity
   module Cloudbuild
@@ -40,6 +41,11 @@ module Unity
         def build_target_path(params={})
           buildtargetid = params[:buildtargetid] || @client.configuration.buildtargetid
           return project_path(params) + "/buildtargets/#{buildtargetid}"
+        end
+
+        def query(params={}, names=[])
+          res = params.select{ |k, v| names.include?(k) }
+          return res.empty? ? "" : "?#{URI.encode_www_form(res)}"
         end
       end
     end

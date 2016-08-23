@@ -3,41 +3,51 @@ require 'mechanize'
 require 'erb'
 require 'ostruct'
 
+docs = []
+params = ["number", "credentialid", "projectupid", "email", "shareid", "id"]
+
 agent = Mechanize.new
 page = agent.get('https://build-api.cloud.unity3d.com/docs/1.0.0/index.html')
-panels = page.search('//div[@class="panel-heading"]')
-docs = []
+operations = page.search('//div[contains(@class,"swagger--panel-operation") and not(contains(@class,"intropanel"))]')
 
-panels.each do |panel|
+operations.each do |operation|
   doc = OpenStruct.new
-  panel.children.each do |child|
-    case child.name
-    when 'h3'
-      doc.name = child.text.strip.downcase.gsub(' ', '_').gsub(/\(|\)/, '')
-    when 'div'
-      doc.verb = child.children[0].text.downcase
-      doc.url = "\"#{child.children[2].text}\""
-        .gsub('"/orgs/{orgid}/projects/{projectid}/buildtargets/{buildtargetid}', 'build_target_path(params) + "')
-        .gsub('"/orgs/{orgid}/projects/{projectid}', 'project_path(params) + "')
-        .gsub('"/orgs/{orgid}', 'org_path(params) + "')
-        .gsub('{', '#{')
-        .gsub(' + ""', '')
-      case doc.url
-      when /\#{number}/
-        doc.param = 'number = params[:number] || @client.configuration.number'
-      when /\#{credentialid}/
-        doc.param = 'credentialid = params[:credentialid] || @client.configuration.credentialid'
-      when /\#{projectupid}/
-        doc.param = 'projectupid = params[:projectupid] || @client.configuration.projectupid'
-      when /\#{email}/
-        doc.param = 'email = params[:email] || @client.configuration.email'
-      when /\#{shareid}/
-        doc.param = 'shareid = params[:shareid] || @client.configuration.shareid'
-      when /\#{id}/
-        doc.param = 'id = params[:id] || @client.configuration.id'
-      end
+
+  heading = operation.at('div[@class="panel-heading"]')
+  body = operation.at('div[@class="panel-body"]')
+  h3 = heading.at('h3/text()')
+  verb = heading.at('div/span[1]/text()')
+  url = heading.at('div/span[2]/text()')
+  table = body.search('section/table/tbody')
+  request_body = body.at('form/section[@class="sw-request-body"]/div[@class="sw-request-model"]')
+
+  doc.name = h3.text.strip.downcase.gsub(' ', '_').gsub(/\(|\)/, '')
+  doc.verb = verb.text.downcase
+  doc.url = "\"#{url.text}\""
+    .gsub('"/orgs/{orgid}/projects/{projectid}/buildtargets/{buildtargetid}', 'build_target_path(params) + "')
+    .gsub('"/orgs/{orgid}/projects/{projectid}', 'project_path(params) + "')
+    .gsub('"/orgs/{orgid}', 'org_path(params) + "')
+    .gsub('{', '#{')
+    .gsub(' + ""', '')
+
+  # add url param
+  params.each do |param|
+    if doc.url =~ /\#{(#{param})}/
+      doc.param = "#{param} = params[:#{param}] || @client.configuration.#{param}"
     end
   end
+  # add query
+  td = []
+  table.children.each do |tr|
+    next unless tr.name == 'tr' && tr.to_s =~ /query/
+    td << ":#{tr.children[1].text.strip}"
+  end
+  unless td.empty?
+    doc.query = 'query(params, [' + td.join(', ') + '])'
+  end
+  # add request body
+  doc.has_body = !request_body.nil?
+
   docs << doc if doc.name != nil
 end
 

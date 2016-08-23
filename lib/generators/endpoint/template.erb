@@ -1,8 +1,12 @@
 <% docs.each do |doc| %>
-def <%= doc.name %>(params={})
+def <%= doc.name %>(params={}<% if doc.has_body -%>, options={}<% end -%>)
 <% if doc.param != nil -%>
   <%= doc.param %>
 <% end -%>
-  request(:<%= doc.verb %>, <%= doc.url %>)
+  path = <%= doc.url %>
+<% if doc.query != nil -%>
+  path += <%= doc.query %>
+<% end -%>
+  request(:<%= doc.verb %>, path<% if doc.has_body -%>, options<% end -%>)
 end
 <% end %>
