@@ -12,7 +12,7 @@ module Unity
           response = @client.connection(parse).send(method) do |request|
             case method
             when :get, :delete
-              request.url(path, options.to_json)
+              request.url(path, options)
             when :post, :put
               request.path = path
               request.body = options.to_json unless options.empty?
