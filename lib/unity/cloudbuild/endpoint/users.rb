@@ -3,15 +3,19 @@ module Unity
     module Endpoint
       class Users < Base
         def get_current_user(params={})
-          request(:get, "/users/me")
+          path = "/users/me"
+          path += query(params, [:include])
+          request(:get, path)
         end
 
-        def update_current_user(params={})
-          request(:put, "/users/me")
+        def update_current_user(params={}, options={})
+          path = "/users/me"
+          request(:put, path, options)
         end
 
         def regenerate_api_key(params={})
-          request(:post, "/users/me/apikey")
+          path = "/users/me/apikey"
+          request(:post, path)
         end
       end
     end

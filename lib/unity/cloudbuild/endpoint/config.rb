@@ -3,11 +3,13 @@ module Unity
     module Endpoint
       class Config < Base
         def list_all_unity_versions(params={})
-        request(:get, "/versions/unity")
+          path = "/versions/unity"
+          request(:get, path)
         end
 
         def list_all_xcode_versions(params={})
-        request(:get, "/versions/xcode")
+          path = "/versions/xcode"
+          request(:get, path)
         end
       end
     end

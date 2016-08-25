@@ -3,61 +3,79 @@ module Unity
     module Endpoint
       class Projects < Base
         def list_all_projects_user(params={})
-          request(:get, "/projects")
+          path = "/projects"
+          path += query(params, [:include])
+          request(:get, path)
         end
 
         def get_project_details(params={})
           projectupid = params[:projectupid] || @client.configuration.projectupid
-          request(:get, "/projects/#{projectupid}")
+          path = "/projects/#{projectupid}"
+          request(:get, path)
         end
 
         def list_all_projects_org(params={})
-          request(:get, org_path(params) + "/projects")
+          path = org_path(params) + "/projects"
+          path += query(params, [:include])
+          request(:get, path)
         end
 
-        def create_project(params={})
-          request(:post, org_path(params) + "/projects")
+        def create_project(params={}, options={})
+          path = org_path(params) + "/projects"
+          request(:post, path, options)
         end
 
         def get_project_details(params={})
-          request(:get, project_path(params))
+          path = project_path(params)
+          path += query(params, [:include])
+          request(:get, path)
         end
 
-        def update_project_details(params={})
-          request(:put, project_path(params))
+        def update_project_details(params={}, options={})
+          path = project_path(params)
+          request(:put, path, options)
         end
 
         def archive_project(params={})
-          request(:delete, project_path(params))
+          path = project_path(params)
+          request(:delete, path)
         end
 
         def get_billing_plan(params={})
-          request(:get, project_path(params) + "/billingplan")
+          path = project_path(params) + "/billingplan"
+          request(:get, path)
         end
 
         def get_ssh_key(params={})
-          request(:get, project_path(params) + "/sshkey")
+          path = project_path(params) + "/sshkey"
+          request(:get, path)
         end
 
         def get_project_statistics(params={})
-          request(:get, project_path(params) + "/stats")
+          path = project_path(params) + "/stats"
+          request(:get, path)
         end
 
         def get_audit_log(params={})
-          request(:get, project_path(params) + "/auditlog")
+          path = project_path(params) + "/auditlog"
+          path += query(params, [:per_page, :page])
+          request(:get, path)
         end
 
         def list_all_users(params={})
-          request(:get, project_path(params) + "/users")
+          path = project_path(params) + "/users"
+          request(:get, path)
         end
 
-        def grant_user_access(params={})
-          request(:post, project_path(params) + "/users")
+        def grant_user_access(params={}, options={})
+          path = project_path(params) + "/users"
+          request(:post, path, options)
         end
 
         def revoke_user_access(params={})
           email = params[:email] || @client.configuration.email
-          request(:delete, project_path(params) + "/users/#{email}")
+          path = project_path(params) + "/users/#{email}"
+          request(:delete, path)
         end
       end
     end

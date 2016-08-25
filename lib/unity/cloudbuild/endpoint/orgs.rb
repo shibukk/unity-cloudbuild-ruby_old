@@ -3,15 +3,18 @@ module Unity
     module Endpoint
       class Orgs < Base
         def get_billing_plan(params={})
-          request(:get, org_path(params) + "/billingplan")
+          path = org_path(params) + "/billingplan"
+          request(:get, path)
         end
 
         def get_ssh_key(params={})
-          request(:get, org_path(params) + "/sshkey")
+          path = org_path(params) + "/sshkey"
+          request(:get, path)
         end
 
         def regenerate_ssh_key(params={})
-          request(:post, org_path(params) + "/sshkey")
+          path = org_path(params) + "/sshkey"
+          request(:post, path)
         end
       end
     end

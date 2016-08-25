@@ -3,11 +3,13 @@ module Unity
     module Endpoint
       class Userdevices < Base
         def list_ios_device_profiles(params={})
-          request(:get, "/users/me/devices")
+          path = "/users/me/devices"
+          request(:get, path)
         end
 
-        def create_ios_device_profile(params={})
-          request(:post, "/users/me/devices")
+        def create_ios_device_profile(params={}, options={})
+          path = "/users/me/devices"
+          request(:post, path, options)
         end
       end
     end
